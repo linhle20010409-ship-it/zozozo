@@ -2,94 +2,127 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ZÔ ZÔ ZÔ! - Drinking Game</title>
-    
-    <link rel="icon" href="data:,">
-    
     <script src="https://cdn.tailwindcss.com"></script>
-    
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Bungee&display=swap');
-        .font-game { font-family: 'Bungee', cursive; }
-        .gradient-bg {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        :root {
+            --neon-pink: #ff00ff;
+            --neon-blue: #00ffff;
+            --neon-yellow: #faff00;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #1a0b2e;
+            color: #f8fafc;
+            overflow-x: hidden;
+            touch-action: manipulation;
+        }
+        .font-bungee {
+            font-family: 'Bungee', cursive;
+        }
+        
+        /* Floating Background Elements */
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            animation: float 20s infinite linear;
+            pointer-events: none;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { transform: translateY(-20vh) scale(1); opacity: 0; }
+        }
+
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+        .preserve-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        
+        @keyframes slideIn {
+          from { transform: translateX(100%); }
+          to { transform: translateX(0); }
+        }
+        .animate-slide-in {
+          animation: slideIn 0.3s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+
+        @keyframes popIn {
+          from { transform: scale(0.8); opacity: 0; }
+          to { transform: scale(1); opacity: 1; }
+        }
+        .animate-pop-in {
+          animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        /* Intense Shaking for Suspense */
+        @keyframes shake {
+          0% { transform: translate(0, 0) rotate(0deg); }
+          25% { transform: translate(-4px, 4px) rotate(-2deg); }
+          50% { transform: translate(4px, -4px) rotate(2deg); }
+          75% { transform: translate(-4px, -4px) rotate(-2deg); }
+          100% { transform: translate(0, 0) rotate(0deg); }
+        }
+        .animate-suspense {
+          animation: shake 0.1s infinite;
+        }
+
+        /* Glow effect for revealed card */
+        @keyframes revealGlow {
+          0% { box-shadow: 0 0 10px var(--neon-pink); }
+          50% { box-shadow: 0 0 50px var(--neon-blue); }
+          100% { box-shadow: 0 0 10px var(--neon-pink); }
+        }
+        .animate-reveal-glow {
+          animation: revealGlow 2s ease-in-out infinite;
+        }
+
+        ::-webkit-scrollbar {
+          width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+          background: rgba(0, 0, 0, 0.2);
+        }
+        ::-webkit-scrollbar-thumb {
+          background: var(--neon-pink);
+          border-radius: 10px;
+        }
+
+        /* Party Dots Pattern */
+        .bg-dots {
+            background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
         }
     </style>
+<script type="importmap">
+{
+  "imports": {
+    "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react": "https://esm.sh/react@^19.2.4",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.39.0"
+  }
+}
+</script>
 </head>
-<body class="gradient-bg text-white min-h-screen flex flex-col items-center justify-center p-4">
-
-    <div id="start-screen" class="text-center">
-        <h1 class="text-6xl font-game text-yellow-400 mb-6 drop-shadow-2xl animate-bounce">ZÔ ZÔ ZÔ!</h1>
-        <p class="text-slate-400 mb-8 text-lg">Hệ thống đã sẵn sàng cho cuộc vui.</p>
-        
-        <button onclick="startGame()" 
-                class="bg-yellow-500 hover:bg-yellow-400 text-slate-900 font-bold py-4 px-10 rounded-full text-xl shadow-lg transform transition hover:scale-110 active:scale-95">
-            SẴN SÀNG CHƯA?
-        </button>
-    </div>
-
-    <div id="game-screen" class="hidden text-center max-w-md w-full">
-        <div class="bg-slate-800 p-8 rounded-3xl border-4 border-yellow-500 shadow-2xl">
-            <h2 id="challenge-title" class="text-2xl font-bold text-yellow-400 mb-4 italic">THỬ THÁCH:</h2>
-            <div id="challenge-text" class="text-xl min-h-[100px] flex items-center justify-center font-medium">
-                Đang chuẩn bị thử thách...
-            </div>
-            
-            <button onclick="nextChallenge()" 
-                    class="mt-8 w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition">
-                TIẾP THEO ➔
-            </button>
-        </div>
-        
-        <button onclick="resetGame()" class="mt-6 text-slate-500 hover:text-white underline text-sm">
-            Quay lại trang chủ
-        </button>
-    </div>
-
-    <script>
-        // Danh sách thử thách
-        const challenges = [
-            "Ai mặc áo đen phải uống 1 ly!",
-            "Người bên trái bạn uống 2 ly.",
-            "Kể tên 3 hãng bia trong 5 giây, không kịp thì uống!",
-            "Cả bàn cùng ZÔ 100%!",
-            "Người cao nhất bàn uống thay người thấp nhất bàn.",
-            "Chỉ định một người uống 1 ly.",
-            "Tất cả những ai đang dùng iPhone uống 1 ngụm.",
-            "Ai có người yêu rồi thì uống 1 ly vui vẻ!",
-            "Đọc ngược bảng chữ cái từ Z về A, sai uống 1 ly."
-        ];
-
-        const startScreen = document.getElementById('start-screen');
-        const gameScreen = document.getElementById('game-screen');
-        const challengeText = document.getElementById('challenge-text');
-
-        // Hàm bắt đầu game
-        function startGame() {
-            startScreen.classList.add('hidden');
-            gameScreen.classList.remove('hidden');
-            nextChallenge();
-        }
-
-        // Hàm lấy thử thách ngẫu nhiên
-        function nextChallenge() {
-            // Hiệu ứng đổi chữ
-            challengeText.classList.add('opacity-0');
-            
-            setTimeout(() => {
-                const randomIndex = Math.floor(Math.random() * challenges.length);
-                challengeText.innerText = challenges[randomIndex];
-                challengeText.classList.remove('opacity-0');
-                challengeText.classList.add('transition-opacity', 'duration-300');
-            }, 200);
-        }
-
-        // Hàm quay lại
-        function resetGame() {
-            gameScreen.classList.add('hidden');
-            startScreen.classList.remove('hidden');
-        }
-    </script>
+<body class="bg-dots">
+    <div id="root"></div>
+    <!-- Background Bubbles -->
+    <div class="bubble" style="width: 40px; height: 40px; left: 10%; animation-delay: 0s;"></div>
+    <div class="bubble" style="width: 20px; height: 20px; left: 30%; animation-delay: 2s;"></div>
+    <div class="bubble" style="width: 60px; height: 60px; left: 70%; animation-delay: 5s;"></div>
+    <div class="bubble" style="width: 30px; height: 30px; left: 90%; animation-delay: 8s;"></div>
 </body>
 </html>
