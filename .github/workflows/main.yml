@@ -1,18 +1,38 @@
-name: Deploy to GitHub Pages
+name: Deploy Static Content to Pages
+
 on:
   push:
-    branches: [main]
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
-  build-and-deploy:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps: deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      
       - name: Setup Pages
         uses: actions/configure-pages@v4
+        
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.' # Đảm bảo đường dẫn này trỏ đúng thư mục chứa index.html
+          # Upload toàn bộ thư mục gốc
+          path: '.'
+          
       - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
