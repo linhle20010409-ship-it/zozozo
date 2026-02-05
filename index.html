@@ -4,16 +4,92 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZÔ ZÔ ZÔ! - Drinking Game</title>
+    
     <link rel="icon" href="data:,">
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bungee&display=swap');
+        .font-game { font-family: 'Bungee', cursive; }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+    </style>
 </head>
-<body class="bg-slate-900 text-white m-0 p-0">
-    <div class="flex flex-col items-center justify-center min-h-screen">
-        <h1 class="text-4xl font-bold text-yellow-400">ZÔ ZÔ ZÔ!</h1>
-        <p class="mt-4 text-lg">Hệ thống đã hoạt động bình thường.</p>
-        <div class="mt-8 p-6 bg-slate-800 rounded-xl shadow-2xl border border-slate-700">
-            <p>Sẵn sàng chưa?</p>
-        </div>
+<body class="gradient-bg text-white min-h-screen flex flex-col items-center justify-center p-4">
+
+    <div id="start-screen" class="text-center">
+        <h1 class="text-6xl font-game text-yellow-400 mb-6 drop-shadow-2xl animate-bounce">ZÔ ZÔ ZÔ!</h1>
+        <p class="text-slate-400 mb-8 text-lg">Hệ thống đã sẵn sàng cho cuộc vui.</p>
+        
+        <button onclick="startGame()" 
+                class="bg-yellow-500 hover:bg-yellow-400 text-slate-900 font-bold py-4 px-10 rounded-full text-xl shadow-lg transform transition hover:scale-110 active:scale-95">
+            SẴN SÀNG CHƯA?
+        </button>
     </div>
+
+    <div id="game-screen" class="hidden text-center max-w-md w-full">
+        <div class="bg-slate-800 p-8 rounded-3xl border-4 border-yellow-500 shadow-2xl">
+            <h2 id="challenge-title" class="text-2xl font-bold text-yellow-400 mb-4 italic">THỬ THÁCH:</h2>
+            <div id="challenge-text" class="text-xl min-h-[100px] flex items-center justify-center font-medium">
+                Đang chuẩn bị thử thách...
+            </div>
+            
+            <button onclick="nextChallenge()" 
+                    class="mt-8 w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition">
+                TIẾP THEO ➔
+            </button>
+        </div>
+        
+        <button onclick="resetGame()" class="mt-6 text-slate-500 hover:text-white underline text-sm">
+            Quay lại trang chủ
+        </button>
+    </div>
+
+    <script>
+        // Danh sách thử thách
+        const challenges = [
+            "Ai mặc áo đen phải uống 1 ly!",
+            "Người bên trái bạn uống 2 ly.",
+            "Kể tên 3 hãng bia trong 5 giây, không kịp thì uống!",
+            "Cả bàn cùng ZÔ 100%!",
+            "Người cao nhất bàn uống thay người thấp nhất bàn.",
+            "Chỉ định một người uống 1 ly.",
+            "Tất cả những ai đang dùng iPhone uống 1 ngụm.",
+            "Ai có người yêu rồi thì uống 1 ly vui vẻ!",
+            "Đọc ngược bảng chữ cái từ Z về A, sai uống 1 ly."
+        ];
+
+        const startScreen = document.getElementById('start-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const challengeText = document.getElementById('challenge-text');
+
+        // Hàm bắt đầu game
+        function startGame() {
+            startScreen.classList.add('hidden');
+            gameScreen.classList.remove('hidden');
+            nextChallenge();
+        }
+
+        // Hàm lấy thử thách ngẫu nhiên
+        function nextChallenge() {
+            // Hiệu ứng đổi chữ
+            challengeText.classList.add('opacity-0');
+            
+            setTimeout(() => {
+                const randomIndex = Math.floor(Math.random() * challenges.length);
+                challengeText.innerText = challenges[randomIndex];
+                challengeText.classList.remove('opacity-0');
+                challengeText.classList.add('transition-opacity', 'duration-300');
+            }, 200);
+        }
+
+        // Hàm quay lại
+        function resetGame() {
+            gameScreen.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+        }
+    </script>
 </body>
 </html>
