@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ZÔ ZÔ ZÔ! - Drinking Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-pink: #ff00ff;
+            --neon-blue: #00ffff;
+            --neon-yellow: #faff00;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #1a0b2e;
+            color: #f8fafc;
+            overflow-x: hidden;
+            touch-action: manipulation;
+        }
+        .font-bungee {
+            font-family: 'Bungee', cursive;
+        }
+        
+        /* Floating Background Elements */
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            animation: float 20s infinite linear;
+            pointer-events: none;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { transform: translateY(-20vh) scale(1); opacity: 0; }
+        }
+
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+        .preserve-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        
+        @keyframes slideIn {
+          from { transform: translateX(100%); }
+          to { transform: translateX(0); }
+        }
+        .animate-slide-in {
+          animation: slideIn 0.3s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+
+        @keyframes popIn {
+          from { transform: scale(0.8); opacity: 0; }
+          to { transform: scale(1); opacity: 1; }
+        }
+        .animate-pop-in {
+          animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        /* Intense Shaking for Suspense */
+        @keyframes shake {
+          0% { transform: translate(0, 0) rotate(0deg); }
+          25% { transform: translate(-4px, 4px) rotate(-2deg); }
+          50% { transform: translate(4px, -4px) rotate(2deg); }
+          75% { transform: translate(-4px, -4px) rotate(-2deg); }
+          100% { transform: translate(0, 0) rotate(0deg); }
+        }
+        .animate-suspense {
+          animation: shake 0.1s infinite;
+        }
+
+        /* Glow effect for revealed card */
+        @keyframes revealGlow {
+          0% { box-shadow: 0 0 10px var(--neon-pink); }
+          50% { box-shadow: 0 0 50px var(--neon-blue); }
+          100% { box-shadow: 0 0 10px var(--neon-pink); }
+        }
+        .animate-reveal-glow {
+          animation: revealGlow 2s ease-in-out infinite;
+        }
+
+        ::-webkit-scrollbar {
+          width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+          background: rgba(0, 0, 0, 0.2);
+        }
+        ::-webkit-scrollbar-thumb {
+          background: var(--neon-pink);
+          border-radius: 10px;
+        }
+
+        /* Party Dots Pattern */
+        .bg-dots {
+            background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react": "https://esm.sh/react@^19.2.4",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.39.0"
+  }
+}
+</script>
+</head>
+<body class="bg-dots">
+    <div id="root"></div>
+    <!-- Background Bubbles -->
+    <div class="bubble" style="width: 40px; height: 40px; left: 10%; animation-delay: 0s;"></div>
+    <div class="bubble" style="width: 20px; height: 20px; left: 30%; animation-delay: 2s;"></div>
+    <div class="bubble" style="width: 60px; height: 60px; left: 70%; animation-delay: 5s;"></div>
+    <div class="bubble" style="width: 30px; height: 30px; left: 90%; animation-delay: 8s;"></div>
+</body>
+</html>
